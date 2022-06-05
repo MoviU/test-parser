@@ -45,8 +45,10 @@ class DB extends Handler
      */
     public function __destruct()
     {
-        $this->db->close();
-        Logger::info("Отключение от базы данных");
+        if ($this->db) {
+            $this->db->close();
+            Logger::info("Отключение от базы данных");
+        }
     }
         
     /**

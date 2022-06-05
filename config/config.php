@@ -5,4 +5,4 @@ define('DB_NAME', "test_parser");
 define('DB_USER', "root");
 define('DB_PASS', "root");
 define('DB_HOST', "localhost");
-define('CONTACT_MAIL', "");
+define('CONTACT_MAIL', "mkachimov@gmail.com");

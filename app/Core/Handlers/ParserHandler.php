@@ -58,6 +58,10 @@ class ParserHandler extends Handler
      */
     private function sendRequest($page) 
     {
+        if (!$page) {
+            Logger::error("Страница в файле конфигураций не указана");
+            die("Страница в файле конфигураций не указана");
+        }
         $this->response = $this->client->request("GET", $page);
         Logger::info("Запрос на страницу: " . $page);
         $this->checkResponse($page);
@@ -72,7 +76,7 @@ class ParserHandler extends Handler
     {
         if ($this->response->getStatusCode() !== 200) {
             Logger::error("Код: ". $this->response->getStatusCode() . " при запросе на страницу ". $page);
-            if ($this->response->getStatusCode == 503) {
+            if ($this->response->getStatusCode() == 503) {
                 Mail::$message = "Ошибка 503 при запросе на страницу " . $page;
                 Mail::sendAlertMail();
             }
