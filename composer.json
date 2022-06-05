@@ -1,0 +1,23 @@
+{
+    "name": "mkach/test-parser",
+    "authors": [
+        {
+            "name": "MoviU",
+            "email": "mkachimov@gmal.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\" : "app/",
+            "App\\Core\\" : "app/Core",
+            "App\\Core\\Handlers\\" : "app/Core/Handlers"
+        },
+        "files": [
+            "config/config.php"
+        ]
+    },
+    "require": {
+        "guzzlehttp/guzzle": "7.0",
+        "idearia/php-logger": "^1.4"
+    }
+}
