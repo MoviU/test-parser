@@ -3,6 +3,7 @@ namespace App\Core\Handlers;
 
 use App\Core\Handlers\DB;
 use App\Core\Handlers\Handler;
+use App\Core\Mail;
 use Idearia\Logger;
 class ParserHandler extends Handler
 {
@@ -72,14 +73,15 @@ class ParserHandler extends Handler
         if ($this->response->getStatusCode() !== 200) {
             Logger::error("Код: ". $this->response->getStatusCode() . " при запросе на страницу ". $page);
             if ($this->response->getStatusCode == 503) {
-
+                Mail::$message = "Ошибка 503 при запросе на страницу " . $page;
+                Mail::sendAlertMail();
             }
             die('Request Error');
         }
         Logger::info("Код: ". $this->response->getStatusCode() . " при запросе на страницу ". $page);
         
     }
-
+    
     /**
      * Получает тело страницы
      *

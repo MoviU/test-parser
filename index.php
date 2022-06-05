@@ -2,8 +2,13 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Core\Parser;
+use Idearia\Logger;
 
 // Запускаем парсер
-$parser = new Parser();
+try {
+    $parser = new Parser();
 
-$parser->handle();
+    $parser->handle();
+} catch (\Exception $e) {
+    Logger::error($e);
+}
