@@ -14,7 +14,7 @@
 
 ```bash
     cd /path/to/repository/
-    php index.php
+    php index.php "<url-к-сайту-для-парсинга>"
 ```
 <h2>Конфигурация</h2>
 
