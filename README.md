@@ -4,7 +4,7 @@
 
 ```bash
     git clone https://github.com/MoviU/test-parser.git
-    cd /path/to/repository/
+    cd test-parser/
     composer install
 ```
 
