@@ -25,7 +25,7 @@ class DB extends Handler
      */
     public function __construct($host = DB_HOST, $user = DB_USER, $pass = DB_PASS, $name = DB_NAME)
     {
-        if ($host == null || $user == null || $pass == null || $name == null) {
+        if ($host == null || $user == null || $name == null) {
             Logger::error("Файл конфигурации базы данных пуст");
             die("Файл конфигурации базы данных пуст");
         }

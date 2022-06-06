@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Час створення: Чрв 05 2022 р., 16:47
--- Версія сервера: 8.0.25-0ubuntu0.20.04.1
--- Версія PHP: 7.4.3
+-- Время создания: Июн 06 2022 г., 15:05
+-- Версия сервера: 8.0.25-0ubuntu0.20.04.1
+-- Версия PHP: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,85 +19,87 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База даних: `test_parser`
+-- База данных: `test_parser`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблиці `details`
+-- Структура таблицы `details`
 --
 
 CREATE TABLE `details` (
   `id` int UNSIGNED NOT NULL,
-  `detail` text CHARACTER SET utf8 COLLATE utf8_general_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `detail` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `product_id` int UNSIGNED NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблиці `prices`
+-- Структура таблицы `prices`
 --
 
 CREATE TABLE `prices` (
   `id` int UNSIGNED NOT NULL,
   `price` decimal(12,2) DEFAULT NULL,
-  `currency` varchar(8) NOT NULL
+  `currency` varchar(8) NOT NULL,
+  `product_id` int UNSIGNED NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблиці `products`
+-- Структура таблицы `products`
 --
 
 CREATE TABLE `products` (
   `id` int UNSIGNED NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `detail_id` int DEFAULT NULL,
-  `price_id` int UNSIGNED DEFAULT NULL
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
 --
--- Індекси збережених таблиць
+-- Индексы сохранённых таблиц
 --
 
 --
--- Індекси таблиці `details`
+-- Индексы таблицы `details`
 --
 ALTER TABLE `details`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
--- Індекси таблиці `prices`
+-- Индексы таблицы `prices`
 --
 ALTER TABLE `prices`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
--- Індекси таблиці `products`
+-- Индексы таблицы `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT для збережених таблиць
+-- AUTO_INCREMENT для сохранённых таблиц
 --
 
 --
--- AUTO_INCREMENT для таблиці `details`
+-- AUTO_INCREMENT для таблицы `details`
 --
 ALTER TABLE `details`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблиці `prices`
+-- AUTO_INCREMENT для таблицы `prices`
 --
 ALTER TABLE `prices`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT для таблиці `products`
+-- AUTO_INCREMENT для таблицы `products`
 --
 ALTER TABLE `products`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
