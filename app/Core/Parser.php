@@ -139,7 +139,7 @@ class Parser extends ParserHandler
         $this->product['title'] = $this->getTitle($this->page_body);
         $this->product['price'] = $this->getPrice($this->page_body);
         $this->product['details'] = $this->getDetails($this->page_body);
-        var_dump($this->product);
+
         // Сохранение
         $this->db->save($this->product);
     }
