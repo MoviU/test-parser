@@ -66,7 +66,7 @@ class DB extends Handler
             Logger::info("Обновление товара №" . $saved_product['id']);
             $this->update($saved_product, $product);
         } else {
-            Logger::info("Создание новго товара");
+            Logger::info("Создание нового товара");
             $this->create($product);
         }
     }
@@ -78,12 +78,18 @@ class DB extends Handler
      * @return void
      */
     public function create($product_data)
-    {
-        $price_id = $this->savePrice($product_data['price']);
-        $detail_id = $this->saveDetails($product_data['details']);
-        
-        $this->db->query("INSERT INTO `products` (`title`, `detail_id`, `price_id`) VALUES ('" . $this->db->real_escape_string($product_data['title']) . "', " . $this->db->real_escape_string($price_id) . ", " . $this->db->real_escape_string($detail_id) . ");");
-        Logger::debug("Продукт №" . $this->db->insert_id . " был успешно добавлен");
+    {        
+        $this->db->query("INSERT INTO `products` (`title`) VALUES ('" . $this->db->real_escape_string($product_data['title']) . "');");
+        if ($this->db->error) {
+            Logger::error($this->db->error);
+            die("Ошибка добаления");
+        }
+        $product_id = $this->db->insert_id;
+        Logger::debug("Продукт №" . $product_id . " был успешно добавлен");
+
+        $this->savePrice($product_data['price'], $product_id);
+        $this->saveDetails($product_data['details'], $product_id);
+
     }
 
     /**
@@ -95,11 +101,15 @@ class DB extends Handler
      */
     public function update(array $old_product, array $new_product_data)
     {
-        $this->updatePrice($new_product_data['price'], $old_product['price_id']);
-        $this->updateDetails($new_product_data['details'], $old_product['detail_id']);
+        $this->updatePrice($new_product_data['price'], $old_product['id']);
+        $this->updateDetails($new_product_data['details'], $old_product['id']);
 
-        $this->db->query("UPDATE `product` SET `title` = " . $this->db->real_escape_string($new_product_data['title']) . " WHERE `id` = " . $this->db->real_escape_string($old_product['id']) . ";");
-        Logger::debug("Продукт №" . $this->db->insert_id . " был успешно обновлен");
+        $this->db->query("UPDATE `products` SET `title` = '" . $this->db->real_escape_string($new_product_data['title']) . "' WHERE `id` = " . $old_product['id'] . ";");
+        if ($this->db->error) {
+            Logger::error($this->db->error);
+            die("Ошибка обновления");
+        }
+        Logger::debug("Продукт №" . $old_product['id'] . " был успешно обновлен");
     }
     
     /**
@@ -108,9 +118,9 @@ class DB extends Handler
      * @param  array $price
      * @return integer
      */
-    private function savePrice(array $price)
+    private function savePrice(array $price, int $product_id)
     {
-        $this->db->query("INSERT INTO `prices` (`price`, `currency`) VALUES ('" . $this->db->real_escape_string($price['amount']) . "', '" . $this->db->real_escape_string($price['currency']) . "');");
+        $this->db->query("INSERT INTO `prices` (`price`, `currency`, `product_id`) VALUES ('" . $this->db->real_escape_string($price['amount']) . "', '" . $this->db->real_escape_string($price['currency']) . "', " . $product_id . ");");
         
         return $this->db->insert_id;
     }
@@ -121,9 +131,9 @@ class DB extends Handler
      * @param  array $details
      * @return integer
      */
-    private function saveDetails(array $details)
+    private function saveDetails(array $details, int $product_id)
     {
-        $this->db->query("INSERT INTO `details` (`detail`) VALUES ('" . $this->db->real_escape_string(json_encode($details)) . "');");
+        $this->db->query("INSERT INTO `details` (`detail`, `product_id`) VALUES ('" . $this->db->real_escape_string(json_encode($details)) . "', " . $product_id . ");");
         
         return $this->db->insert_id;
     }
@@ -137,7 +147,7 @@ class DB extends Handler
      */
     private function updatePrice(array $price, $id)
     {
-        $this->db->query("UPDATE `prices` SET `amount` = " . $this->db->real_escape_string($price['amount']) . ", `currency` = '" . $this->db->real_escape_string($price['currency']) . "' WHERE `id` = " . $this->db->real_escape_string($id) . ";");        
+        $this->db->query("UPDATE `prices` SET `amount` = " . $this->db->real_escape_string($price['amount']) . ", `currency` = '" . $this->db->real_escape_string($price['currency']) . "' WHERE `product_id` = " . $id . ";");        
     }
         
     /**
@@ -149,6 +159,6 @@ class DB extends Handler
      */
     private function updateDetails(array $details, $id)
     {
-        $this->db->query("UPDATE `details` SET `detail` = '" . $this->db->real_escape_string(json_encode($details)) . "' WHERE `id` = " . $this->db->real_escape_string($id) . ";");        
+        $this->db->query("UPDATE `details` SET `detail` = '" . $this->db->real_escape_string(json_encode($details)) . "' WHERE `product_id` = " . $id . ";");        
     }
 }

@@ -26,7 +26,7 @@ class ParserHandler extends Handler
      *
      * @var GuzzleHttp\Client
      */
-    private $client;
+    protected $client;
     
     /**
      * Ответ страницы
@@ -92,6 +92,8 @@ class ParserHandler extends Handler
      */
     protected function getBody(string $page)
     {
+        Logger::info("Получаем тело страницы");
+
         if (!$this->response) {
             $this->sendRequest($page);
         }

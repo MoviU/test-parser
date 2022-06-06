@@ -11,14 +11,14 @@ class Mail
 
     public static function sendAlertMail()
     {
-        if (self::$to) {
+        if (self::$to || self::$from) {
             $headers = 'From: ' . self::$from . "\r\n" .
             'Reply-To: ' . self::$from . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
             mail(self::$to, self::$subject, self::$message, $headers);
             Logger::warning('Сообщение об ошибке было отправлено на почту ' . self::$to);
         } else {
-            Logger::error('В конфиге не указана почта для контакта');
+            Logger::error('В конфиге не указана почта для контакта или отправки');
         }
     }
 }
