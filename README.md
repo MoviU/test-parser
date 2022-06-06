@@ -6,6 +6,8 @@
     git clone https://github.com/MoviU/test-parser.git
 ```
 
+<p>Также требуется создать базу данных с гового образца <b>test_parser.sql</b></p>
+
 <p>Запуск(только через консоль)</p>
 
 ```bash
