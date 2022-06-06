@@ -4,9 +4,11 @@
 
 ```bash
     git clone https://github.com/MoviU/test-parser.git
+    cd /path/to/repository/
+    composer install
 ```
 
-<p>Также требуется создать базу данных с гового образца <b>test_parser.sql</b></p>
+<h3>Также требуется создать базу данных с гового образца <b>test_parser.sql</b></h3>
 
 <p>Запуск(только через консоль)</p>
 

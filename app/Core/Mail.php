@@ -7,12 +7,13 @@ class Mail
     public static $to      = CONTACT_MAIL;
     public static $subject = 'Parser Alert';
     public static $message = '';
+    public static $from = MAIL_FROM;
 
-    public function sendAlertMail()
+    public static function sendAlertMail()
     {
         if (self::$to) {
-            $headers = 'From: webmaster@example.com' . "\r\n" .
-            'Reply-To: webmaster@example.com' . "\r\n" .
+            $headers = 'From: ' . self::$from . "\r\n" .
+            'Reply-To: ' . self::$from . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
             mail(self::$to, self::$subject, self::$message, $headers);
             Logger::warning('Сообщение об ошибке было отправлено на почту ' . self::$to);
