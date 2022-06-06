@@ -6,3 +6,4 @@ define('DB_PASS', "root");
 define('DB_HOST', "localhost");
 define('CONTACT_MAIL', "example@gmail.com");
 define('MAIL_FROM', "test@gmail.com");
+define('LOG_DIR', "logs");
