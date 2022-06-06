@@ -133,7 +133,7 @@ class DB extends Handler
      */
     private function saveDetails(array $details, int $product_id)
     {
-        $this->db->query("INSERT INTO `details` (`detail`, `product_id`) VALUES ('" . $this->db->real_escape_string(json_encode($details)) . "', " . $product_id . ");");
+        $this->db->query("INSERT INTO `details` (`details_long`, `details_short`, `product_id`) VALUES ('" . $this->db->real_escape_string(json_encode($details['details_long'])) . "', '" . $this->db->real_escape_string(json_encode($details['details_short'])) . "', " . $product_id . ");");
         
         return $this->db->insert_id;
     }
@@ -159,6 +159,6 @@ class DB extends Handler
      */
     private function updateDetails(array $details, $id)
     {
-        $this->db->query("UPDATE `details` SET `detail` = '" . $this->db->real_escape_string(json_encode($details)) . "' WHERE `product_id` = " . $id . ";");        
+        $this->db->query("UPDATE `details` SET `details_long` = '" . $this->db->real_escape_string(json_encode($details['details_long'])) . "', `details_short` = '" . $this->db->real_escape_string(json_encode($details['details_short'])) . "' WHERE `product_id` = " . $id . ";");        
     }
 }
