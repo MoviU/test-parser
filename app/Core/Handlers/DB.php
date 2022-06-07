@@ -87,6 +87,7 @@ class DB extends Handler
         }
         $product_id = $this->db->insert_id;
         Logger::debug("Продукт №" . $product_id . " был успешно добавлен");
+        echo "Продукт №" . $product_id . " был успешно добавлен\n";
 
         $this->savePrice($product_data['price'], $product_id);
         $this->saveDetails($product_data['details'], $product_id);
@@ -111,6 +112,7 @@ class DB extends Handler
             die("Ошибка обновления");
         }
         Logger::debug("Продукт №" . $old_product['id'] . " был успешно обновлен");
+        echo "Продукт №" . $old_product['id'] . " был успешно обновлен\n";
     }
     
     /**

@@ -11,7 +11,7 @@ class Mail
 
     public static function sendAlertMail()
     {
-        if (self::$to || self::$from) {
+        if (self::$to && self::$from) {
             $headers = 'From: ' . self::$from . "\r\n" .
             'Reply-To: ' . self::$from . "\r\n" .
             'X-Mailer: PHP/' . phpversion();

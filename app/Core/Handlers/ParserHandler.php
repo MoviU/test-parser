@@ -78,7 +78,7 @@ class ParserHandler extends Handler
                 Mail::$message = "Ошибка 503 при запросе на страницу " . $page;
                 Mail::sendAlertMail();
             }
-            die('Request Error');
+            die("ОШИБКА!  Код: ". $this->response->getStatusCode() . " при запросе на страницу ". $page);
         }
         Logger::info("Код: ". $this->response->getStatusCode() . " при запросе на страницу ". $page);
         
@@ -93,6 +93,7 @@ class ParserHandler extends Handler
     protected function getBody(string $page)
     {
         Logger::info("Получаем тело страницы");
+        echo "Получаем тело страницы\n";
 
         if (!$this->response) {
             $this->sendRequest($page);

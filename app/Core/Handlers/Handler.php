@@ -35,7 +35,10 @@ abstract class Handler
     {
         if (!is_dir($this->root_dir . LOG_DIR)) {
             mkdir($this->root_dir . LOG_DIR);
-            touch($this->root_dir . LOG_DIR . "/parser-log.txt");
+            touch($this->root_dir . LOG_DIR . "/parser-log.log");
+            $gitignore = fopen($this->root_dir . LOG_DIR . "/.gitignore", 'w');
+            fwrite( $gitignore, "*.log\n");
+            fclose($gitignore);
         }
     }
 
@@ -60,6 +63,6 @@ abstract class Handler
         Logger::$print_log = false;
         Logger::$log_dir = LOG_DIR;
         Logger::$log_file_name = 'parser-log';
-        Logger::$log_file_extension = 'txt';
+        Logger::$log_file_extension = 'log';
     }
 }

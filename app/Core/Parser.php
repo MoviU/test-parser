@@ -2,20 +2,22 @@
 namespace App\Core;
 
 use App\Core\Handlers\ParserHandler;
+use App\Helpers\ParserValidator;
 use Idearia\Logger;
 
 class Parser extends ParserHandler
 {
+    use ParserValidator;
+
     /**
      * Парсит название продукта
      *
-     * @param  string $page
      * @return string
      */
-    public function getTitle($page)
+    public function getTitle()
     {
         Logger::info("Парсим название продукта");
-        preg_match('@<h1 class="page__title overflow".*?>(.*?)</h1>@su', $page, $title);
+        preg_match('@<h1 class="page__title overflow".*?>(.*?)</h1>@su', $this->page_body, $title);
         
         return count($title) == 2 ? trim($title[1]) : null;
     }
@@ -23,13 +25,12 @@ class Parser extends ParserHandler
     /**
      * Парсит цену продукта
      *
-     * @param  string $page
      * @return array
      */
-    public function getPrice($page)
+    public function getPrice()
     {
         Logger::info("Парсим цену продукта");
-        preg_match('@<div class="product-box__main_price">(.*?)</div>@su', $page, $price);
+        preg_match('@<div class="product-box__main_price">(.*?)</div>@su', $this->page_body, $price);
 
         $price = count($price) == 2 ? explode(" ", trim($price[1])) : null;
 
@@ -63,16 +64,15 @@ class Parser extends ParserHandler
     /**
      * Парсит большую таблицу характеристик
      *
-     * @param  string $page
      * @return array
      */
-    private function parseDetailsLong(string $page)
+    private function parseDetailsLong()
     {
         Logger::info("Парсим большую таблицу характеристик");
         $details_parsed = [];
         $result = [];
 
-        preg_match('@<div id="section-properties" class="main-details__body js-toggle-body" style="visibility:visible!important;">(.*?)<div id="properties-rules" class="main-details__rules">@su', $page, $details);
+        preg_match('@<div id="section-properties" class="main-details__body js-toggle-body" style="visibility:visible!important;">(.*?)<div id="properties-rules" class="main-details__rules">@su', $this->page_body, $details);
         preg_match_all('@<div class="main-details__item_name">.*?<span>(.*?)</span>.*?</div>@su', $details[0], $keys);
         preg_match_all('@<div class="main-details__item_value">.*?<span>(.*?)</span>.*?</div>@su', $details[0], $values);
         foreach ($values[1] as $key => $value) {
@@ -90,15 +90,14 @@ class Parser extends ParserHandler
     /**
      * Парсит маленькую таблицу характеристик
      *
-     * @param  string $page
      * @return array
      */
-    public function parseDetailsShort(string $page)
+    public function parseDetailsShort()
     {
         Logger::info("Парсим маленькую таблицу характеристик");
         $result = [];
 
-        preg_match('@<div class="product-box__spec_table" data-min="4">.*<div class="product-box__spec_item prop-item">(.*?)</div>.*<a href="#anchor-2" id="show-all-properties"@su', $page, $details);
+        preg_match('@<div class="product-box__spec_table" data-min="4">.*<div class="product-box__spec_item prop-item">(.*?)</div>.*<a href="#anchor-2" id="show-all-properties"@su', $this->page_body, $details);
         preg_match_all('@<div class="product-box__spec_item prop-item">.*<div>(.*?)</div>.*</div>@su', $details[0], $keys);
         preg_match_all('@<div class="product-box__spec_item prop-item">.*<div>.*</div>.*<div>(.*?)</div>@su', $details[0], $values);
 
@@ -112,15 +111,14 @@ class Parser extends ParserHandler
     /**
      * Парсит детали продукта
      *
-     * @param  string $page
      * @return array
      */
-    public function getDetails(string $page)
+    public function getDetails()
     {
         Logger::info("Парсим характеристики продукта");
 
-        $details_long = $this->parseDetailsLong($page);
-        $details_short = $this->parseDetailsShort($page);
+        $details_long = $this->parseDetailsLong();
+        $details_short = $this->parseDetailsShort();
         
         return [
             'details_long' => $details_long,
@@ -136,9 +134,9 @@ class Parser extends ParserHandler
     private function parse()
     {
         // Парсинг
-        $this->product['title'] = $this->getTitle($this->page_body);
-        $this->product['price'] = $this->getPrice($this->page_body);
-        $this->product['details'] = $this->getDetails($this->page_body);
+        $this->product['title'] = $this->checkTitle($this->getTitle());
+        $this->product['price'] = $this->checkPrice($this->getPrice());
+        $this->product['details'] = $this->checkDetails($this->getDetails());
 
         // Сохранение
         $this->db->save($this->product);
